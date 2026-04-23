@@ -10,30 +10,45 @@ import Graph from "./Graph/Graph"
 export default function Dashboard() {
   const [criterion, setCriterion] = useState<string>("")
   const [query, setQuery] = useState<string>("")
-  const [list, setList] = useState(null)
+  const [list, setList] = useState([])
   const [selected, setSelected] = useState([])
   const [comparisonCriterion, setComparisonCriterion] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
 
   useEffect(() => {
 
     if (!query || !criterion) return
-
+    setLoading(true)
     const timeout = setTimeout(() => {
       const fetchData = async () => {
         try {
+
           const res = await fetch(
             `/api?criterion=${criterion}&query=${encodeURIComponent(query)}`
           )
 
+          if (res.status === 404) {
+            setLoading(false)
+            setError("No country found");
+            setList([]);
+            return;
+          }
+
           if (!res.ok) {
+            setLoading(false)
             throw new Error('Failed to fetch')
           }
 
+
           const data = await res.json()
           setList(data)
+          setLoading(false)
+          setError("");
           console.log(data)
         } catch (err) {
+          setLoading(false)
           console.error(err)
         }
       }
@@ -44,8 +59,6 @@ export default function Dashboard() {
     return () => clearTimeout(timeout)
   }, [query, criterion])
 
-  // console.log(country1)
-
   return (
     <>
       <div className="flex py-10">
@@ -55,14 +68,25 @@ export default function Dashboard() {
             criterion={criterion}
             setCriterion={setCriterion}
           />
-          <SearchInput
-            query={query}
-            setQuery={setQuery}
-            list={list}
-            setList={setList}
-            setSelected={setSelected}
+          <div className="flex flex-col gap-2">
+            <SearchInput
+              query={query}
+              setQuery={setQuery}
+              list={list}
+              setList={setList}
+              setSelected={setSelected}
+              setError={setError}
+              loading={loading}
 
-          />
+            />
+            {error && <div className="text-red-500 pl-10">{error}</div>}
+            {loading && (
+              <div className="flex pl-10">
+                <div className="w-6 h-6 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+              </div>
+            )}
+
+          </div>
           <div>Compare</div>
           <ComparisonCriterion
             comparisonCriterion={comparisonCriterion}

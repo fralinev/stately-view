@@ -36,7 +36,10 @@ export async function GET(request: Request) {
   const res = await fetch(`${BASE_URL}${endpoint}`)
 
   if (res.status === 404) {
-  return NextResponse.json([])
+  return NextResponse.json(
+    { error: "No country found" },
+    { status: 404 }
+  );
 }
 
   if (!res.ok) {
