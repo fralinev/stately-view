@@ -1,4 +1,3 @@
-"use client"
 
 export default function ComparisonCriterion({comparisonCriterion, setComparisonCriterion}:any) {
   return (
@@ -7,7 +6,7 @@ export default function ComparisonCriterion({comparisonCriterion, setComparisonC
     <select
       value={comparisonCriterion}
       onChange={(e) => setComparisonCriterion(e.target.value)}
-      className="px-4 py-2 bg-gray-900 text-gray-100 border border-gray-700"
+      className="px-4 py-2 bg-gray-900 text-gray-100 border border-gray-700 w-40"
     >
       <option value="" disabled>Compare...</option>
       <option value="population">Population</option>

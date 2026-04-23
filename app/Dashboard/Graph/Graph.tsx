@@ -1,12 +1,18 @@
 "use client"
 import { useMemo } from "react";
 import { BarChart, Bar, XAxis, YAxis } from "recharts";
+import type { Country, ComparisonCriterion } from "../Dashboard";
 
-export default function Graph({ comparisonCriterion, selected }: any) {
-  if (selected.length < 2 || !comparisonCriterion) return null
+type GraphProps = {
+  comparisonCriterion: ComparisonCriterion | "";
+  selected: Country[]
+}
+
+export default function Graph({ comparisonCriterion, selected }: GraphProps) {
+  if (selected.length < 1 || !comparisonCriterion) return null
 
   const data = useMemo(() => {
-    return selected.map((country: any) => {
+    return selected.map((country: Country) => {
       const value =
         comparisonCriterion === "languages"
           ? Object.keys(country.languages || {}).length

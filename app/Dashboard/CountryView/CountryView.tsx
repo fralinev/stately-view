@@ -1,8 +1,14 @@
 "use client"
-import { useState, useRef } from "react";
+import { useState, useRef, Dispatch, SetStateAction } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
+import type { Country } from "../Dashboard";
 
-export default function CountryView({ selected, setSelected }: any) {
+type CountryViewProps = {
+  selected: Country[]
+  setSelected: Dispatch<SetStateAction<Country[]>>;
+}
+
+export default function CountryView({ selected, setSelected }: CountryViewProps) {
   const [tooltip, setTooltip] = useState<{
     x: number;
     y: number;
@@ -55,7 +61,7 @@ export default function CountryView({ selected, setSelected }: any) {
   return (
     <>
       <div className="flex flex-col gap-10">
-        {selected?.map((country: any) => {
+        {selected?.map((country: Country) => {
           return (
             <div
               key={country.cca3}
@@ -83,8 +89,8 @@ export default function CountryView({ selected, setSelected }: any) {
               <div className="flex flex-col gap-2 py-5">
                 <div>{country.name.official}</div>
                 <div>Capital: {country.capital[0]}</div>
-                <div>Population: {country.population}</div>
-                <div>Languages: {JSON.stringify(Object.values(country.languages))}</div>
+                <div>Population: {country.population.toLocaleString()}</div>
+                <div>Languages: {Object.values(country.languages || {}).join(", ")}</div>
               </div>
             </div>
           )
