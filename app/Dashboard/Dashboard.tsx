@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import SearchInput from "./SearchField.tsx/SearchField"
 import Criterion from "./Criterion/Criterion"
 import CountryView from "./CountryView/CountryView"
@@ -49,7 +49,7 @@ export default function Dashboard() {
   return (
     <>
       <div className="flex py-10">
-        <div className="flex flex-col gap-10 py-10">
+        <div className="flex flex-col gap-10 w-200 items-center">
           <div>Select</div>
           <Criterion
             criterion={criterion}
@@ -61,18 +61,19 @@ export default function Dashboard() {
             list={list}
             setList={setList}
             setSelected={setSelected}
-            
+
           />
           <div>Compare</div>
-          <ComparisonCriterion 
-          comparisonCriterion={comparisonCriterion}
-          setComparisonCriterion={setComparisonCriterion}
+          <ComparisonCriterion
+            comparisonCriterion={comparisonCriterion}
+            setComparisonCriterion={setComparisonCriterion}
           />
-          <Graph comparisonCriterion={comparisonCriterion} selected={selected}/>
+          <Graph comparisonCriterion={comparisonCriterion} selected={selected} />
 
         </div>
-        <CountryView selected={selected} setSelected={setSelected}/>
-
+        <div className="flex items-center">
+          <CountryView selected={selected} setSelected={setSelected} />
+        </div>
       </div>
 
     </>

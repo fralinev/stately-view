@@ -54,15 +54,16 @@ export default function CountryView({ selected, setSelected }: any) {
 
   return (
     <>
-      <div className="flex gap-10">
+      <div className="flex flex-col gap-10">
         {selected?.map((country: any) => {
           return (
             <div
               key={country.cca3}
-              className="relative group"
+              className="group flex gap-5"
               onMouseMove={(e) => handleMouseMove(e, country.name.common)}
               onMouseLeave={handleMouseLeave}
             >
+              <div className="relative">
                 <img
                   src={country?.flags.svg}
                   className="w-60 h-40 object-cover"
@@ -78,16 +79,18 @@ export default function CountryView({ selected, setSelected }: any) {
                   className="absolute top-1 right-1
                 rounded-full w-7 h-7 flex items-center justify-center text-black
                 opacity-0 group-hover:opacity-100 transition cursor-pointer"/>
+              </div>
+              <div className="flex flex-col gap-2 py-5">
+                <div>{country.name.official}</div>
+                <div>Capital: {country.capital[0]}</div>
+                <div>Population: {country.population}</div>
+                <div>Languages: {JSON.stringify(Object.values(country.languages))}</div>
+              </div>
             </div>
           )
         })}
 
-        {/* <div className="flex flex-col gap-2 py-5">
-          <div>{country.name.official}</div>
-          <div>Capital: {country.capital[0]}</div>
-          <div>Population: {country.population}</div>
-          <div>Languages: {JSON.stringify(Object.values(country.languages))}</div>
-        </div> */}
+
       </div>
       {tooltip.visible && (
         <div
