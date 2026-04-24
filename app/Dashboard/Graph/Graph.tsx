@@ -33,7 +33,7 @@ export default function Graph({ comparisonCriterion, selected }: GraphProps) {
       <BarChart width={400} height={300} data={data} margin={{ top: 5, right: 20, left: 30, bottom: 5 }}>
         <XAxis dataKey="name" />
         <YAxis />
-        <Bar dataKey="value" fill="#8884d8" />
+        <Bar dataKey="value" fill="#1f3ef0" />
       </BarChart>
 
     </div>

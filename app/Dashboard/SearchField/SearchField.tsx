@@ -31,8 +31,12 @@ export default function SearchInput({ query, setQuery, list, setList, setSelecte
 
   return (
     <>
-      <div className="w-100 flex gap-10 px-10">
-        <div className="relative" ref={containerRef}>
+      <div className=" flex gap-10 px-10">
+        <div className="relative flex items-center gap-5" ref={containerRef}>
+          <label htmlFor="search-criterion" className="text-gray-200">
+            Query:
+          </label>
+          <div className="relative">
           <input
             id="search"
             placeholder="find a country..."
@@ -43,7 +47,7 @@ export default function SearchInput({ query, setQuery, list, setList, setSelecte
               setList([])
               setQuery(e.target.value)
             }}
-            className="w-40 px-4 py-2 bg-gray-900 text-white border border-gray-700 
+            className="w-47 px-4 py-2 bg-gray-900 text-white border border-gray-700 
           focus:outline-none focus:ring-2 focus:ring-blue-500 
           focus:border-blue-500 placeholder-gray-400"
           />
@@ -69,6 +73,7 @@ export default function SearchInput({ query, setQuery, list, setList, setSelecte
               ))}
             </div>
           )}
+          </div>
         </div>
       </div>
 

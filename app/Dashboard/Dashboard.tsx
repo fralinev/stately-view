@@ -30,7 +30,7 @@ export default function Dashboard() {
   const [query, setQuery] = useState<string>("")
   const [list, setList] = useState<Country[]>([])
   const [selected, setSelected] = useState<Country[]>([])
-  const [comparisonCriterion, setComparisonCriterion] = useState<ComparisonCriterion | "">("");
+  const [comparisonCriterion, setComparisonCriterion] = useState<ComparisonCriterion | "">("population");
   const [error, setError] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -85,8 +85,10 @@ export default function Dashboard() {
   return (
     <>
       <div className="flex py-10">
-        <div className="flex flex-col gap-5 w-1/2 items-start px-10">
-          <div className="px-10 font-bold">Select</div>
+        <div className="flex flex-col gap-5 w-1/2 items-center px-10">
+          <div className="px-10 py-3 bg-blue-900/30 text-blue-200 font-semibold ">
+            Add a country to the list
+          </div>
           <SearchCriterion
             searchCriterion={searchCriterion}
             setSearchCriterion={setSearchCriterion}
@@ -103,13 +105,18 @@ export default function Dashboard() {
             />
             {error && <div className="text-red-500 pl-10">{error}</div>}
             {loading && (
-              <div className="flex pl-10">
-                <div className="w-6 h-6 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+              <div className="pl-27">
+                <div className="flex items-center gap-3 px-4 py-2 bg-blue-900/30 border border-blue-800/40 rounded-md w-fit">
+                  <div className="w-5 h-5 border-2 border-blue-800 border-t-blue-400 rounded-full animate-spin"></div>
+                  <span className="text-blue-200 text-sm">Loading...</span>
+                </div>
               </div>
             )}
 
           </div>
-          <div className="px-10 font-bold">Compare</div>
+          <div className="px-10 py-3 bg-blue-900/30 text-blue-200 font-semibold mt-20">
+            Visualize the countries in the list
+          </div>
           <div className="flex flex-col gap-20">
             <ComparisonCriterion
               comparisonCriterion={comparisonCriterion}
@@ -118,7 +125,7 @@ export default function Dashboard() {
             <Graph comparisonCriterion={comparisonCriterion} selected={selected} />
           </div>
         </div>
-        <div className="flex items-center">
+        <div className="flex justify-center w-1/2">
           <CountryView selected={selected} setSelected={setSelected} />
         </div>
       </div>

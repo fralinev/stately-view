@@ -7,14 +7,15 @@ type CountryViewProps = {
   selected: Country[]
   setSelected: Dispatch<SetStateAction<Country[]>>;
 }
+type ToolTipType = {
+  x: number;
+  y: number;
+  text: string;
+  visible: boolean;
+}
 
 export default function CountryView({ selected, setSelected }: CountryViewProps) {
-  const [tooltip, setTooltip] = useState<{
-    x: number;
-    y: number;
-    text: string;
-    visible: boolean;
-  }>({ x: 0, y: 0, text: "", visible: false });
+  const [tooltip, setTooltip] = useState<ToolTipType>({ x: 0, y: 0, text: "", visible: false });
 
   const hoverTimerRef = useRef<number | null>(null);
   const lastMouseRef = useRef({ x: 0, y: 0, text: "" });
@@ -61,6 +62,9 @@ export default function CountryView({ selected, setSelected }: CountryViewProps)
   return (
     <>
       <div className="flex flex-col gap-10">
+        <div className="px-10 py-3 bg-blue-900/30 text-blue-200 font-semibold">
+            Country List
+          </div>
         {selected?.map((country: Country) => {
           return (
             <div
@@ -77,9 +81,10 @@ export default function CountryView({ selected, setSelected }: CountryViewProps)
 
                 <IoMdCloseCircle
                   onClick={() => {
-                    setTooltip((prev: any) => ({ ...prev, visible: false }));
-                    setSelected((prev: any) => {
-                      return prev.filter((el: any) => el.cca3 !== country.cca3)
+                    clearHoverTimer();
+                    setTooltip((prev: ToolTipType) => ({ ...prev, visible: false }));
+                    setSelected((prev: Country[]) => {
+                      return prev.filter((el: Country) => el.cca3 !== country.cca3)
                     })
                   }}
                   className="absolute top-1 right-1
