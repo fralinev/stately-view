@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import SearchInput from "./SearchField/SearchField"
 import SearchCriterion from "./SearchCriterion/SearchCriterion"
 import CountryView from "./CountryView/CountryView"
 import ComparisonCriterion from "./ComparisonCriterion/ComparisonCriterion"
 import Graph from "./Graph/Graph"
+import Section from "../components/Section"
+import { useDashboard } from "../hooks/useDashboard"
 
 export type Country = {
   cca3: string;
@@ -26,74 +27,32 @@ export type Country = {
 export type ComparisonCriterion = "languages" | "borders" | "population" | "area";
 
 export default function Dashboard() {
-  const [searchCriterion, setSearchCriterion] = useState<string>("name")
-  const [query, setQuery] = useState<string>("")
-  const [list, setList] = useState<Country[]>([])
-  const [selected, setSelected] = useState<Country[]>([])
-  const [comparisonCriterion, setComparisonCriterion] = useState<ComparisonCriterion | "">("population");
-  const [error, setError] = useState<string>("")
-  const [loading, setLoading] = useState<boolean>(false)
 
-
-  useEffect(() => {
-
-    if (!query || !searchCriterion) {
-      setLoading(false);
-      setList([]);
-      setError("");
-      return;
-    }
-    setLoading(true)
-    const timeout = setTimeout(() => {
-      const fetchData = async () => {
-        try {
-
-          const res = await fetch(
-            `/api?criterion=${searchCriterion}&query=${encodeURIComponent(query)}`
-          )
-
-          if (res.status === 404) {
-            setLoading(false)
-            setError("No country found");
-            setList([]);
-            return;
-          }
-
-          if (!res.ok) {
-            setLoading(false)
-            throw new Error('Failed to fetch')
-          }
-
-
-          const data = await res.json()
-          setList(data)
-          setLoading(false)
-          setError("");
-          console.log(data)
-        } catch (err) {
-          setLoading(false)
-          console.error(err)
-        }
-      }
-
-      fetchData()
-    }, 1000)
-
-    return () => clearTimeout(timeout)
-  }, [query, searchCriterion])
+  const {
+    searchCriterion,
+    setSearchCriterion,
+    query,
+    setQuery,
+    list,
+    setList,
+    selected,
+    setSelected,
+    comparisonCriterion,
+    setComparisonCriterion,
+    error,
+    setError,
+    loading,
+  } = useDashboard()
 
   return (
     <>
-      <div className="flex py-10">
-        <div className="flex flex-col gap-5 w-1/2 items-center px-10">
-          <div className="px-10 py-3 bg-blue-900/30 text-blue-200 font-semibold ">
-            Add a country to the list
-          </div>
-          <SearchCriterion
-            searchCriterion={searchCriterion}
-            setSearchCriterion={setSearchCriterion}
-          />
-          <div className="flex flex-col gap-2">
+      <div id="container" className="flex items-start py-10">
+        <div id="left" className="flex flex-col gap-5 w-[40%] px-10">
+          <Section text="Add a country to my list">
+            <SearchCriterion
+              searchCriterion={searchCriterion}
+              setSearchCriterion={setSearchCriterion}
+            />
             <SearchInput
               query={query}
               setQuery={setQuery}
@@ -113,20 +72,22 @@ export default function Dashboard() {
               </div>
             )}
 
-          </div>
-          <div className="px-10 py-3 bg-blue-900/30 text-blue-200 font-semibold mt-20">
-            Visualize the countries in the list
-          </div>
-          <div className="flex flex-col gap-20">
-            <ComparisonCriterion
-              comparisonCriterion={comparisonCriterion}
-              setComparisonCriterion={setComparisonCriterion}
-            />
-            <Graph comparisonCriterion={comparisonCriterion} selected={selected} />
-          </div>
+          </Section>
+          <Section text="Visualize my list">
+
+            <div className="flex flex-col gap-20">
+              <ComparisonCriterion
+                comparisonCriterion={comparisonCriterion}
+                setComparisonCriterion={setComparisonCriterion}
+              />
+              <Graph comparisonCriterion={comparisonCriterion} selected={selected} />
+            </div>
+          </Section>
         </div>
-        <div className="flex justify-center w-1/2">
-          <CountryView selected={selected} setSelected={setSelected} />
+        <div id="right" className="flex justify-center w-[60%] items-start">
+          <Section text="My list (drag and drop)">
+            <CountryView selected={selected} setSelected={setSelected} />
+          </Section>
         </div>
       </div>
 
